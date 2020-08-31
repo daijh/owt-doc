@@ -59,6 +59,14 @@ cp /home/owt-js-simple-samples/script2.js extras/basic_example/public/
 ```
 
 ## Add SRT stream to OWT
+### OWT work as caller mode(Recommended mode)
+- Open https://serverip:3004 in Chrome browser
+- Use ffmpeg command to start a SRT listener:
+```bash
+./ffmpeg -re -i /home/big-buck-bunny-animation-1080p.mp4 -c copy -f mpegts srt://10.239.158.38:20000?mode=listener
+```
+- Select "caller" in streaming area in UI and input SRT listener url in "srturl" in UI and then click "streamingIn SRT start" button to add stream to OWT.
+
 ### OWT work as listener mode
 - Open https://serverip:3004 in Chrome browser
 - Use default listener mode in UI and click "streamingIn SRT start" button to start a SRT listener in OWT, then the ip and port will return by the restful request and print in Chrome console. You can specify SRT listen port range in streaming_agent.toml:
@@ -79,12 +87,5 @@ install_srt()
 install_ffmpeg()
 ```
 
-### OWT work as caller mode
-- Open https://serverip:3004 in Chrome browser
-- Use ffmpeg command to start a SRT listener:
-```bash
-./ffmpeg -re -i /home/big-buck-bunny-animation-1080p.mp4 -c copy -f mpegts srt://10.239.158.38:20000?mode=listener
-```
-- Select "caller" in streaming area in UI and input SRT listener url in "srturl" in UI and then click "streamingIn SRT start" button to add stream to OWT.
 
 Then you can see srt streaming in mix stream.
