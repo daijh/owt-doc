@@ -61,13 +61,19 @@ cp /home/owt-js-simple-samples/script2.js extras/basic_example/public/
 ## Add SRT stream to OWT
 ### OWT work as listener mode
 - Open https://serverip:3004 in Chrome browser
-- Use default listener mode in UI and click "streamingIn SRT start" button to start a SRT listener in OWT, then the ip and port will return by the restful request and print in Chrome console.
+- Use default listener mode in UI and click "streamingIn SRT start" button to start a SRT listener in OWT, then the ip and port will return by the restful request and print in Chrome console. You can specify SRT listen port range in streaming_agent.toml:
+```bash
+# The SRT listening UDP port range
+maxport = 20000 #default: 0
+minport = 10000 #default: 0
+```
+
 - Use ffmpeg command to push a mp4 stream to owt server with following command:
 ```bash
 ./ffmpeg -re -i /home/big-buck-bunny-animation-1080p.mp4 -c copy -f mpegts srt://10.239.158.38:20000
 ```
 
-Make sure SRT feature is enabled in ffmpeg. Please follow modules in scripts/installCommonDeps.sh if you build ffmpeg source code:
+Make sure SRT feature is enabled in ffmpeg. Please follow modules in scripts/installCommonDeps.sh if you build ffmpeg from source code:
 ```bash
 install_srt()
 install_ffmpeg()
