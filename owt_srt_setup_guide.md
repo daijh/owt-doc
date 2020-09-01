@@ -65,6 +65,13 @@ cp /home/owt-js-simple-samples/script2.js extras/basic_example/public/
 ```bash
 ./ffmpeg -re -i /home/big-buck-bunny-animation-1080p.mp4 -c copy -f mpegts srt://10.239.158.38:20000?mode=listener
 ```
+
+Make sure SRT feature is enabled in ffmpeg. Please follow modules in scripts/installCommonDeps.sh if you build ffmpeg from source code:
+```bash
+install_srt()
+install_ffmpeg()
+```
+
 - Select "caller" in streaming area in UI and input SRT listener url in "srturl" in UI and then click "streamingIn SRT start" button to add stream to OWT.
 
 ### OWT work as listener mode
