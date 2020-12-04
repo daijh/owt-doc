@@ -12,11 +12,11 @@ This document provides the guide to add stream to OWT with SRT protocol.
 ## OWT Source code
 
 ### Apply SRT patch in server code
-- Use following command to patch SRT PR in owt-server 4.3.x branch.
+- Use following command to patch SRT PR in owt-server 4.3.x branch. It includes SRT streaming input and multiple SRT synchronization.
 
 ```bash
 cd /home/owt-server
-curl https://patch-diff.githubusercontent.com/raw/open-webrtc-toolkit/owt-server/pull/619.patch | git am
+curl https://patch-diff.githubusercontent.com/raw/open-webrtc-toolkit/owt-server/pull/744.patch | git am
 ```
 - Install SRT dependencies
 If OWT dependencies have been installed in your environment, please run scripts/installSRT.sh to reinstall ffmpeg and webrtc dependencies only as follow:
