@@ -12,35 +12,48 @@ This document provides the guide to add stream to OWT with SRT protocol.
 ## OWT Source code
 
 ### Apply SRT patch in server code
-- Use following command to patch SRT PR in owt-server 4.3.x branch. It includes SRT streaming input and multiple SRT synchronization.
+- Use following command to patch SRT PR in owt-server 4.3.x branch.<br>
+It includes SRT streaming input and multiple SRT synchronization.
 
 ```bash
-cd /home/owt-server
+git clone https://github.com/open-webrtc-toolkit/owt-server.git
+git checkout -t remotes/origin/4.3.x
+
+cd owt-server
+
 curl https://patch-diff.githubusercontent.com/raw/open-webrtc-toolkit/owt-server/pull/744.patch | git am
 ```
-- Install SRT dependencies
-If OWT dependencies have been installed in your environment, please run scripts/installSRT.sh to reinstall ffmpeg and webrtc dependencies only as follow:
+
+- Install dependencies
 
 ```bash
-./scripts/installSRT.sh 
-or 
-./scripts/installSRT.sh --with-nonfree-libs
+cd owt-server
+
+# re-install deps
+rm ./build -rf
+./scripts/installDepsUnattended.sh
 ```
-Otherwise please run scripts/installDepsUnattended.sh to start a full dependencies install.
 
 - Build OWT
-If you have build and pack OWT in your environment, you can run following command to rebuild OWT:
+
 ```bash
 ./scripts/build.js -t mcu -r -c
 ```
 
 ### Apply SRT patch in client code
 - Use following command to patch SRT PR in owt-client-javascript 4.3.x branch.
+
 ```bash
-cd /home/owt-client-javascript
+git clone https://github.com/open-webrtc-toolkit/owt-client-javascript.git
+git checkout -t remotes/origin/4.3.x
+
+cd owt-client-javascript
+
 curl https://patch-diff.githubusercontent.com/raw/open-webrtc-toolkit/owt-client-javascript/pull/401.patch | git am
 ```
+
 - Build client sdk with following command
+
 ```bash
 cd owt-client-javascript/scripts/
 grunt
@@ -50,33 +63,36 @@ grunt
 Pack OWT server and client and then start OWT:
 ```bash
 cd owt-server
-./scripts/pack.js -f -i -s /home/owt-client-javascript/dist/samples/conference
-cd dist
-cp /home/owt-js-simple-samples/index.html extras/basic_example/public/
-cp /home/owt-js-simple-samples/script2.js extras/basic_example/public/
+
+# create dist
+./scripts/pack.js --full --install-module --no-pseudo --with-ffmpeg --sample-path <PATH>/owt-client-javascript/dist/samples/conference
+
+cd ./dist
+
+# update SRT test page and js script
+cp owt-js-simple-samples/index.html extras/basic_example/public/
+cp owt-js-simple-samples/script2.js extras/basic_example/public/
+
 ./bin/init-all.sh
 ./bin/start-all.sh
 ```
 
 ## Add SRT stream to OWT
-### OWT work as caller mode(Recommended mode)
+### OWT work as caller mode (***Recommended mode***)
 - Open https://serverip:3004 in Chrome browser
-- Use ffmpeg command to start a SRT listener:
+- Use ffmpeg command to start a SRT listener
+
 ```bash
-./ffmpeg -re -i /home/big-buck-bunny-animation-1080p.mp4 -c copy -f mpegts srt://10.239.158.38:20000?mode=listener
+# <ip> is local ip, set <port> to 20000 for test
+ffmpeg -re -i test.mp4 -c copy -f mpegts srt://<ip>:<port>?mode=listener
 ```
 
-Make sure SRT feature is enabled in ffmpeg. Please follow modules in scripts/installCommonDeps.sh if you build ffmpeg from source code:
-```bash
-install_srt()
-install_ffmpeg()
-```
-
-- Select "caller" in streaming area in UI and input SRT listener url in "srturl" in UI and then click "streamingIn SRT start" button to add stream to OWT.
+- Select "caller" in streaming area in UI and input SRT listener url in "url" in UI and then click "streamingIn SRT start" button to add stream to OWT.
 
 ### OWT work as listener mode
 - Open https://serverip:3004 in Chrome browser
 - Use default listener mode in UI and click "streamingIn SRT start" button to start a SRT listener in OWT, then the ip and port will return by the restful request and print in Chrome console. You can specify SRT listen port range in streaming_agent.toml:
+
 ```bash
 # The SRT listening UDP port range
 maxport = 20000 #default: 0
@@ -84,15 +100,10 @@ minport = 10000 #default: 0
 ```
 
 - Use ffmpeg command to push a mp4 stream to owt server with following command:
-```bash
-./ffmpeg -re -i /home/big-buck-bunny-animation-1080p.mp4 -c copy -f mpegts srt://10.239.158.38:20000
-```
 
-Make sure SRT feature is enabled in ffmpeg. Please follow modules in scripts/installCommonDeps.sh if you build ffmpeg from source code:
 ```bash
-install_srt()
-install_ffmpeg()
+# <ip> is local ip, set <port> to 20000 for test
+./ffmpeg -re -i test.mp4 -c copy -f mpegts srt://<ip>:<port>
 ```
-
 
 Then you can see srt streaming in mix stream.
