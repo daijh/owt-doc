@@ -21,7 +21,11 @@ git checkout -t remotes/origin/4.3.x
 
 cd owt-server
 
+# srt streaming input and synchronization
 curl https://patch-diff.githubusercontent.com/raw/open-webrtc-toolkit/owt-server/pull/744.patch | git am
+
+# fix streaming out type error
+curl https://patch-diff.githubusercontent.com/raw/open-webrtc-toolkit/owt-server/pull/795.patch | git am
 ```
 
 - Install dependencies
