@@ -38,7 +38,7 @@ git am 708.patch
 
 # nvm is installed in user path
 source ~/.bashrc
-nvm use v10 # add this line into end of .bashrc
+nvm use v10 >/dev/null # add this line into end of .bashrc
 
 # build
 ./scripts/build.js -t mcu -r -c
